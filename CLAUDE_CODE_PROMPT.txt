@@ -1,0 +1,33 @@
+CLAUDE CODE İÇİN HAZIR PROMPT (Windows'ta, proje klasöründe çalıştır)
+=====================================================================
+Aşağıdaki metni olduğu gibi Claude Code'a yapıştır. Klasör:
+C:\Users\berkc\Desktop\ates_su
+
+----------------------------------------------------------------------
+"C:\Users\berkc\Desktop\ates_su" klasöründe Flutter + Flame ile yazılmış
+"Ateş & Su" adında bir oyunun lib/ ve pubspec.yaml dosyaları var; platform
+klasörleri (android/ios/windows) ve git henüz yok. Sırayla yap, her adımda
+kısaca ne yaptığını söyle:
+
+1. Ortamı doğrula: "flutter --version" ve "flutter doctor". Flutter veya
+   gereken araçlar eksikse neyi nasıl kuracağımı söyle ve DUR.
+2. Platform klasörlerini üret (mevcut lib/ ve pubspec.yaml'a DOKUNMADAN):
+   "flutter create . --platforms=android,ios,windows"
+3. Bağımlılıkları indir: "flutter pub get". flame veya shared_preferences
+   sürümünde uyumsuzluk olursa en güncel kararlı sürüme güncelle ve söyle.
+4. Derlemeyi engelleyen bir hata olursa, oku ve MİNİMUM değişiklikle düzelt;
+   oyun mantığını değiştirme. Sonra "flutter analyze" temiz olana kadar sürdür.
+5. Telefonda/emülatörde çalıştır: "flutter run". (Windows'ta denemek için:
+   "flutter run -d windows".)
+6. Çalıştığını gördükten sonra GitHub'a gönder:
+   - "git init" (gerekiyorsa), uygun bir .gitignore zaten var.
+   - "git add -A" ve "git commit -m 'Ates & Su: ilk oynanabilir surum'"
+   - Bana GitHub'da yeni bir repo açmam için ne yapacağımı söyle ya da
+     repo URL'sini sorup "git remote add origin <URL>" + "git branch -M main"
+     + "git push -u origin main" yap.
+
+Notlar:
+- Oyun dikey (portrait) mobil için tasarlandı; Windows'ta da çalışır.
+- His/zorluk ayarları yalnızca lib/config.dart içinde; istersem oradan
+  oynarız (açıklık genişliği openingDegrees ve dönüş baseRotation en kritik).
+----------------------------------------------------------------------

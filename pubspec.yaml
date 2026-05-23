@@ -1,0 +1,23 @@
+name: ates_su
+description: "Ates & Su - sakin, tek-dokunuslu sonsuz kacis oyunu (Flutter + Flame)."
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # 2D oyun motoru (iOS + Android + Windows tek kod tabani).
+  flame: 1.23.0
+  # En iyi skoru cihazda kalici saklamak icin.
+  shared_preferences: ^2.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
