@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../config.dart';
 import '../game/ates_su_game.dart';
 
-/// Alevin arkasında kalan yumuşak ışık izi. Alevin son konumlarını saklar
-/// ve giderek sönen daireler olarak çizer. Dünya uzayında (0,0) çizer.
+/// Karakterin arkasinda kalan yumusak iz. Son konumlari saklar ve giderek sonen
+/// daireler olarak cizer. Renk secili skin'den gelir.
 class Trail extends PositionComponent with HasGameReference<AtesSuGame> {
   Trail() : super(priority: 5);
 
@@ -31,12 +31,12 @@ class Trail extends PositionComponent with HasGameReference<AtesSuGame> {
   @override
   void render(Canvas canvas) {
     for (int i = 0; i < _points.length; i++) {
-      final double k = i / _maxPoints; // yeni noktalar daha belirgin
+      final double k = i / _maxPoints;
       final p = _points[i];
       canvas.drawCircle(
         Offset(p.x, p.y),
         GameConfig.fireRadius * (0.25 + 0.5 * k),
-        Paint()..color = GameConfig.fireOuter.withOpacity(0.05 + 0.18 * k),
+        Paint()..color = game.skin.body.withValues(alpha: 0.05 + 0.18 * k),
       );
     }
   }

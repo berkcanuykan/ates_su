@@ -56,7 +56,7 @@ class GameConfig {
   static const double maxRotation = 1.15;
 
   /// Yeni halka, öncekinin merkezi bu y oranını (ekran yüksekliği) geçince üretilir.
-  static const double spawnTriggerYFactor = 0.70;
+  static const double spawnTriggerYFactor = 0.40;
 
   // --- Renkler (su/ateş sahnesi — koyu tema) ---
   static const Color background = Color(0xFF0E1E2E);

@@ -6,32 +6,19 @@ import 'package:flutter/material.dart';
 import '../config.dart';
 import '../game/ates_su_game.dart';
 
-/// Yukarıdan inen, yavaşça dönen su halkası. Çeperinde [GameConfig.openingCount]
-/// adet açıklık vardır. Alev SADECE açıklıklardan veya halkanın iç deliğinden
-/// güvenle geçer; suya (dolu yaya) değerse oyun biter.
+/// Yukaridan inen, yavasca donen halka. Ceperinde [GameConfig.openingCount]
+/// adet aciklik vardir. Karakter sadece acikliklardan veya ic delikten guvenle
+/// gecer; doluya (suya) degerse oyun biter.
 ///
-/// Çarpışma, Flame'in dolu daire hitbox'ı yerine ANALİTİK hesaplanır: alevin
-/// halka merkezine uzaklığı su bandında mı + o andaki açı bir açıklığa mı denk
-/// geliyor? Böylece görünen boşluk = gerçekten geçilebilir boşluk.
+/// Carpisma ANALITIK hesaplanir: merkeze uzaklik banda mi denk geliyor + o anki
+/// aci bir acikliga mi denk geliyor? Boylece gorunen bosluk = gercek bosluk.
 class WaterRing extends PositionComponent with HasGameReference<AtesSuGame> {
   WaterRing() : super(anchor: Anchor.center);
 
   late final double _radius;
-  late final double _seg; // iki açıklık merkezi arası açı
-  late final double _gapHalf; // açıklık yarı genişliği (radyan)
+  late final double _seg;
+  late final double _gapHalf;
   bool _scored = false;
-
-  final Paint _water = Paint()
-    ..color = GameConfig.water
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = GameConfig.ringThickness
-    ..strokeCap = StrokeCap.round;
-
-  final Paint _sheen = Paint()
-    ..color = GameConfig.waterEdge
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = GameConfig.ringThickness * 0.34
-    ..strokeCap = StrokeCap.round;
 
   @override
   Future<void> onLoad() async {
@@ -64,7 +51,6 @@ class WaterRing extends PositionComponent with HasGameReference<AtesSuGame> {
     }
   }
 
-  /// Alev su bandında VE açıklık dışındaysa çarpışma var.
   bool _hits(Vector2 firePos, double fireR) {
     final double dx = firePos.x - position.x;
     final double dy = firePos.y - position.y;
@@ -72,7 +58,7 @@ class WaterRing extends PositionComponent with HasGameReference<AtesSuGame> {
 
     final double inner = _radius - GameConfig.ringThickness / 2 - fireR;
     final double outer = _radius + GameConfig.ringThickness / 2 + fireR;
-    if (dist < inner || dist > outer) return false; // delikte veya tamamen dışarıda
+    if (dist < inner || dist > outer) return false;
 
     final double localAngle = math.atan2(dy, dx) - angle;
     return !_isOpening(localAngle);
@@ -92,6 +78,18 @@ class WaterRing extends PositionComponent with HasGameReference<AtesSuGame> {
 
   @override
   void render(Canvas canvas) {
+    // Renkler secili skin'den (tema) gelir; canli degisir.
+    final Paint band = Paint()
+      ..color = game.skin.obstacle
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = GameConfig.ringThickness
+      ..strokeCap = StrokeCap.round;
+    final Paint sheen = Paint()
+      ..color = game.skin.obstacleEdge
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = GameConfig.ringThickness * 0.34
+      ..strokeCap = StrokeCap.round;
+
     final Rect rect = Rect.fromCircle(
       center: Offset(_radius, _radius),
       radius: _radius,
@@ -99,8 +97,8 @@ class WaterRing extends PositionComponent with HasGameReference<AtesSuGame> {
     final double sweep = _seg - 2 * _gapHalf;
     for (int i = 0; i < GameConfig.openingCount; i++) {
       final double start = i * _seg + _gapHalf;
-      canvas.drawArc(rect, start, sweep, false, _water);
-      canvas.drawArc(rect, start, sweep, false, _sheen);
+      canvas.drawArc(rect, start, sweep, false, band);
+      canvas.drawArc(rect, start, sweep, false, sheen);
     }
   }
 }

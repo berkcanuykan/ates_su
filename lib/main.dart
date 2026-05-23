@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'game/ates_su_game.dart';
-import 'services/high_score.dart';
+import 'services/profile.dart';
 import 'ui/game_over_overlay.dart';
-import 'ui/start_overlay.dart';
+import 'ui/home_overlay.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await HighScore.load();
+  await Profile.load();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -34,7 +34,7 @@ class AtesSuApp extends StatelessWidget {
         body: GameWidget<AtesSuGame>(
           game: game,
           overlayBuilderMap: {
-            AtesSuGame.startOverlay: (context, game) => StartOverlay(game: game),
+            AtesSuGame.homeOverlay: (context, game) => HomeOverlay(game: game),
             AtesSuGame.gameOverOverlay: (context, game) =>
                 GameOverOverlay(game: game),
           },

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../game/ates_su_game.dart';
-import '../services/high_score.dart';
+import '../services/profile.dart';
 
-/// Oyun bitiş ekranı: skor, en iyi skor, rekor rozeti ve tekrar başlat.
+/// Oyun bitis ekrani: skor, en iyi skor, rekor rozeti, tekrar oyna ve menu.
 class GameOverOverlay extends StatelessWidget {
   const GameOverOverlay({super.key, required this.game});
 
@@ -11,14 +11,15 @@ class GameOverOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Profile.selectedSkin;
     return Container(
-      color: Colors.black.withOpacity(0.5),
+      color: Colors.black.withValues(alpha: 0.55),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              'Söndün',
+              'Bitti',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 38,
@@ -31,13 +32,13 @@ class GameOverOverlay extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFC83A),
+                  color: theme.accent,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(
                   'Yeni rekor!',
                   style: TextStyle(
-                    color: Color(0xFF3A2A05),
+                    color: Color(0xFF2A2740),
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -53,26 +54,40 @@ class GameOverOverlay extends StatelessWidget {
               ),
             ),
             Text(
-              'En iyi: ${HighScore.best}',
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
+              'En iyi: ${Profile.best}',
+              style: const TextStyle(color: Colors.white70, fontSize: 20),
             ),
             const SizedBox(height: 28),
-            ElevatedButton(
-              onPressed: game.restart,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFFC83A),
-                foregroundColor: const Color(0xFF3A2A05),
-                padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: game.goHome,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    side: const BorderSide(color: Colors.white54),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: const Text('Menu', style: TextStyle(fontSize: 18)),
                 ),
-                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              child: const Text('Tekrar Oyna'),
+                const SizedBox(width: 14),
+                ElevatedButton(
+                  onPressed: game.restart,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.body,
+                    foregroundColor: const Color(0xFF2A2740),
+                    padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  child: const Text('Tekrar Oyna'),
+                ),
+              ],
             ),
           ],
         ),

@@ -3,11 +3,9 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../config.dart';
 import '../game/ates_su_game.dart';
 
-/// Arka planda yavaşça yükselen soluk baloncuklar — su atmosferi ve derinlik.
-/// Her şeyin arkasında çizilir.
+/// Arka planda yavasca yukselen soluk baloncuklar. Renk secili skin'den gelir.
 class Bubbles extends PositionComponent with HasGameReference<AtesSuGame> {
   Bubbles() : super(priority: -10);
 
@@ -38,7 +36,7 @@ class Bubbles extends PositionComponent with HasGameReference<AtesSuGame> {
     super.update(dt);
     for (int i = 0; i < _bubbles.length; i++) {
       final b = _bubbles[i];
-      b.pos.y -= b.speed * dt; // baloncuklar yükselir
+      b.pos.y -= b.speed * dt;
       if (b.pos.y + b.r < 0) {
         _bubbles[i] = _spawn();
       }
@@ -47,7 +45,7 @@ class Bubbles extends PositionComponent with HasGameReference<AtesSuGame> {
 
   @override
   void render(Canvas canvas) {
-    final Paint paint = Paint()..color = GameConfig.bubble;
+    final Paint paint = Paint()..color = game.skin.bubble;
     for (final b in _bubbles) {
       canvas.drawCircle(Offset(b.pos.x, b.pos.y), b.r, paint);
     }

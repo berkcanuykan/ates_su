@@ -28,7 +28,7 @@ class DeathFade extends PositionComponent with HasGameReference<AtesSuGame> {
     final double k = (1 - _t / _dur).clamp(0.0, 1.0) * 0.4;
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.x, size.y),
-      Paint()..color = const Color(0xFF0A1622).withOpacity(k),
+      Paint()..color = const Color(0xFF0A1622).withValues(alpha: k),
     );
   }
 }

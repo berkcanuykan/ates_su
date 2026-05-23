@@ -49,7 +49,7 @@ class Puff extends PositionComponent {
   @override
   void render(Canvas canvas) {
     final double k = (1 - _t / life).clamp(0.0, 1.0);
-    final Paint paint = Paint()..color = color.withOpacity(k * 0.9);
+    final Paint paint = Paint()..color = color.withValues(alpha: k * 0.9);
     for (final p in _ps) {
       canvas.drawCircle(Offset(p.pos.x, p.pos.y), p.r * k, paint);
     }

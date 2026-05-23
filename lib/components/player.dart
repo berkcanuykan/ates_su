@@ -3,22 +3,23 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import '../art/creature.dart';
 import '../config.dart';
 import '../game/ates_su_game.dart';
 import 'trail.dart';
 
-/// Oyuncunun kontrol ettiği alev.
+/// Oyuncunun kontrol ettigi sevimli karakter (secili skin'e gore cizilir).
 ///
-/// Yatayda sabit (ortada) durur. Dokununca yükselir, bırakınca nazikçe düşer.
-/// Suya değme kontrolü [WaterRing] içinde yapılır; burada sadece zemin/tavan
-/// sınırları ve "tüy gibi" fizik vardır. Hafif titreşim (flicker) canlılık katar.
+/// Yatayda sabit (ortada). Dokununca yukselir, birakinca nazikce duser.
+/// Suya/engele degme kontrolu [WaterRing] icinde yapilir; burada zemin/tavan
+/// sinirlari, "tuy gibi" fizik ve ziplama hissi (squash/stretch) vardir.
 class Player extends PositionComponent with HasGameReference<AtesSuGame> {
   Player() : super(anchor: Anchor.center, priority: 10);
 
   double _vy = 0;
-  double _t = 0; // titreşim/salınım zamanı
+  double _t = 0;
 
-  /// Çarpışma için kullanılan etkin yarıçap (game tarafından okunur).
+  /// Carpisma icin etkin yaricap.
   double get radius => GameConfig.fireRadius;
 
   double get _startY => game.size.y * GameConfig.fireStartYFactor;
@@ -27,7 +28,6 @@ class Player extends PositionComponent with HasGameReference<AtesSuGame> {
   Future<void> onLoad() async {
     size = Vector2.all(GameConfig.fireRadius * 2);
     reset();
-    // Işık izini (arkada) ekle.
     game.add(Trail());
   }
 
@@ -68,39 +68,17 @@ class Player extends PositionComponent with HasGameReference<AtesSuGame> {
 
   @override
   void render(Canvas canvas) {
-    // Hafif titreşim: dikey ölçek küçük salınım yapar.
-    final double flick = 1.0 + math.sin(_t * 18) * 0.06;
-    final double cx = size.x / 2;
-    final double cy = size.y / 2;
-    const double r = GameConfig.fireRadius;
-
-    canvas.save();
-    canvas.translate(cx, cy);
-    canvas.scale(1.0, flick);
-
-    // Sıcak hale (yumuşak, düşük opaklık).
-    canvas.drawCircle(Offset(0, r * 0.2), r * 1.5, Paint()
-      ..color = GameConfig.fireOuter.withOpacity(0.18));
-
-    // Dış alev (damla biçimi, sivri ucu yukarı).
-    final outer = Path()
-      ..moveTo(0, -r * 1.25)
-      ..cubicTo(r * 1.2, -r * 0.2, r * 1.0, r * 0.9, 0, r * 1.15)
-      ..cubicTo(-r * 1.0, r * 0.9, -r * 1.2, -r * 0.2, 0, -r * 1.25)
-      ..close();
-    canvas.drawPath(outer, Paint()..color = GameConfig.fireOuter);
-
-    // İç alev.
-    final inner = Path()
-      ..moveTo(0, -r * 0.65)
-      ..cubicTo(r * 0.7, r * 0.0, r * 0.6, r * 0.7, 0, r * 0.85)
-      ..cubicTo(-r * 0.6, r * 0.7, -r * 0.7, r * 0.0, 0, -r * 0.65)
-      ..close();
-    canvas.drawPath(inner, Paint()..color = GameConfig.fireInner);
-
-    // Çekirdek.
-    canvas.drawCircle(Offset(0, r * 0.35), r * 0.32, Paint()..color = GameConfig.fireCore);
-
-    canvas.restore();
+    final double sq = game.state == GameState.playing
+        ? (1 - _vy / 2600).clamp(0.82, 1.18)
+        : 1.0;
+    drawCreature(
+      canvas,
+      size.x / 2,
+      size.y / 2,
+      GameConfig.fireRadius,
+      game.skin,
+      t: _t,
+      squashY: sq,
+    );
   }
 }
